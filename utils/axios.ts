@@ -1,9 +1,8 @@
 import axios from "axios";
 import { toast } from "sonner";
-// import { SignOut } from "@/hooks/queries/useAuth";
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL + "/api",
+  baseURL:  "/api",
   withCredentials: true,
 });
 

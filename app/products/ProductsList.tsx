@@ -6,7 +6,6 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import DrawerWithSides from "./components/CartDrawer";
 
  const products = [
   {
@@ -68,8 +67,11 @@ export default function ProductsList() {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
   return (
+    <>
+    
+          <h4>Products</h4>
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <DrawerWithSides />
+
       {products.map((product) => (
         <div
           key={product.id}
@@ -96,5 +98,6 @@ export default function ProductsList() {
         </div>
       ))}
     </div>
+    </>
   );
 }

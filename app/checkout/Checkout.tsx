@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { CartItem } from "@/types/product.types";
 import CartActionButtons from "../products/components/CartActionButtons";
 import { PackageSearch } from "lucide-react";
+import { usePlaceOrder } from "@/hooks/queries/useOrders";
 import Link from "next/link";
 type DeliveryDetails = {
   full_name: string;
@@ -31,6 +32,7 @@ export default function Checkout() {
       : [];
     setProducts(products);
   }, []);
+  const { mutate, isPending } = usePlaceOrder();
 
   const subtotal = useMemo(() => {
     return products.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -40,7 +42,9 @@ export default function Checkout() {
     if (products.length === 0) {
       return toast.error("Your cart is empty");
     }
-    router.push("/order-confirmed");
+    (data as any).products = products
+
+    mutate(data);
   };
 
   return (
@@ -52,34 +56,40 @@ export default function Checkout() {
         </p>
 
         <div className="flex flex-col gap-3">
-
-{
-    products.length <= 0 && <div className="flex flex-col items-center justify-center gap-4 py-12">
-  <PackageSearch className="h-16 w-16 text-muted-foreground" />
-  <div className="text-center">
-    <h3 className="text-lg font-semibold">Your cart is empty</h3>
-    <p className="text-sm text-muted-foreground">
-      Browse products and add your favorites.
-    </p>
-  </div>
-  <Button>
-    <Link href="/">Browse Products</Link>
-  </Button>
-</div>
-}
-
-          {products && products.length >0 && products.map((item) => (
-            <div key={item.id} className="rounded-lg border p-3">
-              <div className="flex gap-3">
-                <img src={item.image} className="h-16 w-16 rounded-md object-cover" />
-                <div>
-                  <h4 className="font-medium">{item.product_name}</h4>
-                  <p className="text-sm text-muted-foreground">${item.price}</p>
-                </div>
+          {products.length <= 0 && (
+            <div className="flex flex-col items-center justify-center gap-4 py-12">
+              <PackageSearch className="h-16 w-16 text-muted-foreground" />
+              <div className="text-center">
+                <h3 className="text-lg font-semibold">Your cart is empty</h3>
+                <p className="text-sm text-muted-foreground">
+                  Browse products and add your favorites.
+                </p>
               </div>
-              <CartActionButtons item={item} setProducts={setProducts} />
+              <Button>
+                <Link href="/">Browse Products</Link>
+              </Button>
             </div>
-          ))}
+          )}
+
+          {products &&
+            products.length > 0 &&
+            products.map((item) => (
+              <div key={item.id} className="rounded-lg border p-3">
+                <div className="flex gap-3">
+                  <img
+                    src={item.image}
+                    className="h-16 w-16 rounded-md object-cover"
+                  />
+                  <div>
+                    <h4 className="font-medium">{item.product_name}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      ${item.price}
+                    </p>
+                  </div>
+                </div>
+                <CartActionButtons item={item} setProducts={setProducts} />
+              </div>
+            ))}
         </div>
 
         <div className="border-t mt-4 pt-4 flex items-center justify-between text-lg font-semibold">
@@ -125,8 +135,13 @@ export default function Checkout() {
             )}
           </div>
 
-          <Button size="lg" className="w-full" type="submit">
-            Place Order
+          <Button
+            size="lg"
+            className="w-full"
+            type="submit"
+            disabled={isPending}
+          >
+            {isPending ? "Loading..." : "Place Order"}
           </Button>
         </form>
       </div>
