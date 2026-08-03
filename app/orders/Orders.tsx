@@ -92,8 +92,8 @@ export default function ViewOrders() {
       )}
 
       {!isLoading &&
-        !isError &&
-        orders?.map((order: any) => (
+        !isError && orders && orders.length > 0 &&
+        orders.map((order: any) => (
           <div
             key={order._id}
             className="rounded-lg border p-4 flex flex-col gap-3"
