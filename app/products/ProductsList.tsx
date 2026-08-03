@@ -1,13 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 
- const products = [
+const products = [
   {
     id: 1,
     product_name: "Nike Jordan Air Rev",
@@ -68,36 +63,34 @@ export default function ProductsList() {
   }
   return (
     <>
-    
-          <h4>Products</h4>
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <h4>Products</h4>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="relative max-w-md rounded-xl bg-linear-to-r from-neutral-600 to-violet-300 shadow-lg"
+          >
+            <div className="flex h-60 items-center justify-center">
+              <img
+                src={product.image}
+                alt={product.product_name}
+                className="h-52 object-contain"
+              />
+            </div>
 
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="relative max-w-md rounded-xl bg-linear-to-r from-neutral-600 to-violet-300 shadow-lg"
-        >
-          <div className="flex h-60 items-center justify-center">
-            <img
-              src={product.image}
-              alt={product.product_name}
-              className="h-52 object-contain"
-            />
+            <Card className="ring-0">
+              <CardHeader>
+                <CardTitle>{product.product_name}</CardTitle>
+              </CardHeader>
+
+              <CardFooter className="justify-between">
+                <span className="text-xl font-semibold">${product.price}</span>
+                <Button onClick={() => saveToCart(product)}>Add to cart</Button>
+              </CardFooter>
+            </Card>
           </div>
-
-          <Card className="ring-0">
-            <CardHeader>
-              <CardTitle>{product.product_name}</CardTitle>
-            </CardHeader>
-
-            <CardFooter className="justify-between">
-              <span className="text-xl font-semibold">${product.price}</span>
-              <Button onClick={() => saveToCart(product)}>Add to cart</Button>
-            </CardFooter>
-          </Card>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
     </>
   );
 }
