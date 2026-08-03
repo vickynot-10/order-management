@@ -60,7 +60,7 @@ const PlaceOrderSchema = z.object({
     .min(1, "At least one product is required"),
 });
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     if (!body) {
@@ -90,6 +90,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       phone,
       products,
       ordered_on: new Date(),
+      status : "placed"
     };
 
     const insert = await db.collection("orders").insertOne(payload);
