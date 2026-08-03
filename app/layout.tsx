@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Noto_Sans_Georgian } from "next/font/google";
 import "./globals.css";
 import RootWrapper from "@/wrappers/MainWrapper";
+import AppHeader from "@/components/common/Header";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -35,7 +36,9 @@ export default function RootLayout({
       className={`${geist.variable} ${geistMono.variable} ${notoGeorgian.variable}`}
     >
       <body className="min-h-full flex flex-col max-w-full overflow-x-clip">
-        <RootWrapper>{children} </RootWrapper>{" "}
+        <RootWrapper> 
+           <AppHeader />
+          {children} </RootWrapper>{" "}
       </body>
     </html>
   );

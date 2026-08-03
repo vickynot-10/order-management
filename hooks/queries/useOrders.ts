@@ -1,5 +1,5 @@
 "use client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/axios";
 import { toast } from "sonner";
@@ -16,6 +16,34 @@ export function usePlaceOrder() {
       if (data.success) {
         toast.success(data.msg ?? "Order Placed successfully");
         router.push("/");
+      }
+    },
+  });
+}
+
+export function useGetOrders(deviceId: string) {
+  return useQuery({
+    queryKey: ["orders", deviceId],
+    queryFn: async () => {
+      const res = await api.post("/orders", { device_id: deviceId });
+      return res.data;
+    },
+    enabled: !!deviceId,
+  });
+}
+
+export function useUpdateOrderStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { order_id: string; status: string }) => {
+      const res = await api.patch("/orders", data);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.msg ?? "Order status updated");
+        queryClient.invalidateQueries({ queryKey: ["orders"] });
       }
     },
   });

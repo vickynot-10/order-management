@@ -52,7 +52,7 @@ const PlaceOrderSchema = z.object({
       error: "Phone number is required",
     })
     .min(10, "Phone number must be at least 10 digits"),
-
+  device_id: z.string().optional(),
   products: z
     .array(ProductSchema, {
       error: "Products are required",
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { full_name, address, phone, products } = validate.data;
+    const { full_name, address, phone, products, device_id } = validate.data;
 
     const payload = {
       full_name,
@@ -90,7 +90,8 @@ export async function POST(req: NextRequest) {
       phone,
       products,
       ordered_on: new Date(),
-      status : "placed"
+      status: "placed",
+      device_id,
     };
 
     const insert = await db.collection("orders").insertOne(payload);

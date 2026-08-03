@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { CartItem } from "@/types/product.types";
@@ -16,7 +15,7 @@ type DeliveryDetails = {
   phone: string;
 };
 
-function getDeviceId(): string {
+export function getDeviceId(): string {
   let deviceId = localStorage.getItem("device_id");
   if (!deviceId) {
     deviceId = crypto.randomUUID();
@@ -51,7 +50,7 @@ export default function Checkout() {
       return toast.error("Your cart is empty");
     }
     (data as any).products = products;
-(data as any).device_id = getDeviceId();
+    (data as any).device_id = getDeviceId();
     mutate(data);
   };
 

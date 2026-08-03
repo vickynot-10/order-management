@@ -3,12 +3,20 @@ import DrawerWithSides from "@/app/products/components/CartDrawer";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 export default function AppHeader() {
   const { setTheme, resolvedTheme } = useTheme();
 
   function ToggleTheme() {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }
+
+  const router = useRouter();
+
+  function navigate() {
+    router.push("/orders");
+  }
+
   return (
     <header className=" flex flex-row justify-end gap-3">
       <div className="flex items-center gap-1">
@@ -18,6 +26,9 @@ export default function AppHeader() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </div>
+      <Button onClick={navigate} size="lg">
+        View Orders
+      </Button>
       <DrawerWithSides />
     </header>
   );
