@@ -13,7 +13,13 @@ export default function AppHeader() {
 
   const router = useRouter();
 
-  function navigate() {
+  function navigate(type : 1 | 2) {
+    if(type === 1){
+    
+      // admin order
+      
+     return router.push("/admin-orders");
+    }
     router.push("/orders");
   }
 
@@ -26,7 +32,13 @@ export default function AppHeader() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </div>
-      <Button onClick={navigate} size="lg">
+
+
+      <Button onClick={ () => navigate(1)} size="lg">
+        View Admin Orders
+      </Button>
+
+      <Button onClick={ () => navigate(2)} size="lg">
         View Orders
       </Button>
       <DrawerWithSides />
