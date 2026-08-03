@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -17,9 +18,12 @@ import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import CartActionButtons from "./CartActionButtons";
+
 const DrawerWithSides = () => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
+
   useEffect(() => {
     const products = localStorage.getItem("cart")
       ? JSON.parse(localStorage.getItem("cart") || "[]")
@@ -35,16 +39,18 @@ const DrawerWithSides = () => {
   }, [products]);
 
   const isCartEmpty = products.length <= 0;
+
   function NaviagateCheckout() {
     if (isCartEmpty) {
       return toast.error("Atleast Pick 1 item to checkout");
     }
+    setOpen(false);
     router.push("/checkout");
   }
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Drawer swipeDirection="right">
+      <Drawer swipeDirection="right" open={open} onOpenChange={setOpen}>
         <DrawerTrigger>
           <Button size="lg">View Cart</Button>
         </DrawerTrigger>

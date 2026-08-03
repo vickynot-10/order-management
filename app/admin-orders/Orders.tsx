@@ -1,12 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getDeviceId } from "../checkout/Checkout";
-import { useGetOrders } from "@/hooks/queries/useOrders";
+import {
+  useGetAdminOrders,
+  useUpdateOrderStatus,
+} from "@/hooks/queries/useOrders";
 import { ORDER_CONSTANTS } from "@/constants";
 import { OrderStatus } from "@/types/order.types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { PackageSearch } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, PackageSearch } from "lucide-react";
+import { toast } from "sonner";
+
+const STATUS_OPTIONS = Object.values(ORDER_CONSTANTS) as OrderStatus[];
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   [ORDER_CONSTANTS.PLACED]: "bg-blue-100 text-blue-700",
@@ -34,13 +47,18 @@ function OrderSkeleton() {
 }
 
 export default function ViewOrders() {
-  const [deviceId, setDeviceId] = useState("");
+  const { data: orders, isLoading, isError } = useGetAdminOrders();
+  const { mutate: updateStatus, isPending } = useUpdateOrderStatus();
 
-  useEffect(() => {
-    setDeviceId(getDeviceId());
-  }, []);
-
-  const { data: orders, isLoading, isError } = useGetOrders(deviceId);
+  const handleStatusChange = (orderId: string, status: OrderStatus) => {
+    updateStatus(
+      { order_id: orderId, status },
+      {
+        onSuccess: () => toast.success(`Order marked as ${status}`),
+        onError: () => toast.error("Failed to update order status"),
+      },
+    );
+  };
 
   return (
     <div className="p-6 flex flex-col gap-4">
@@ -107,6 +125,30 @@ export default function ViewOrders() {
                 </div>
               ))}
             </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isPending}
+                  className="w-fit"
+                >
+                  Update status <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {STATUS_OPTIONS.map((status) => (
+                  <DropdownMenuItem
+                    key={status}
+                    disabled={status === order.status}
+                    onClick={() => handleStatusChange(order._id, status)}
+                  >
+                    {status}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ))}
     </div>
