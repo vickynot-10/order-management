@@ -25,7 +25,9 @@ export function useGetOrders(deviceId: string) {
   return useQuery({
     queryKey: ["orders", deviceId],
     queryFn: async () => {
-      const res = await api.post("/orders", { device_id: deviceId });
+      const res = await api.get("/orders", { params : {
+        device_id: deviceId
+      } });
       return res.data;
     },
     enabled: !!deviceId,
