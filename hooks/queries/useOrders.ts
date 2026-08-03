@@ -29,7 +29,10 @@ export function useGetOrders(deviceId: string) {
       return res.data?.orders ?? [];
     },
     enabled: !!deviceId,
+    //  refetchInterval: 8000,
+    // refetchIntervalInBackground: false,
   });
+
 }
 
 export function useGetAdminOrders() {

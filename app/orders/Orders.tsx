@@ -7,6 +7,7 @@ import { OrderStatus } from "@/types/order.types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { PackageSearch } from "lucide-react";
+import { useOrdersSSE } from "@/hooks/SSE/useOrdersSSE";
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   [ORDER_CONSTANTS.PLACED]: "bg-blue-100 text-blue-700",
@@ -41,6 +42,9 @@ export default function ViewOrders() {
   }, []);
 
   const { data: orders, isLoading, isError } = useGetOrders(deviceId);
+
+    useOrdersSSE(deviceId);
+    console.log("Calls SSE")
 
   return (
     <div className="p-6 flex flex-col gap-4">
