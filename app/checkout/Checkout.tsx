@@ -16,8 +16,16 @@ type DeliveryDetails = {
   phone: string;
 };
 
+function getDeviceId(): string {
+  let deviceId = localStorage.getItem("device_id");
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem("device_id", deviceId);
+  }
+  return deviceId;
+}
+
 export default function Checkout() {
-  const router = useRouter();
   const [products, setProducts] = useState<CartItem[]>([]);
 
   const {
@@ -42,8 +50,8 @@ export default function Checkout() {
     if (products.length === 0) {
       return toast.error("Your cart is empty");
     }
-    (data as any).products = products
-
+    (data as any).products = products;
+(data as any).device_id = getDeviceId();
     mutate(data);
   };
 
