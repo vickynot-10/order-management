@@ -16,12 +16,10 @@ export default function AppHeader() {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }
 
-  function navigate(type: 1 | 2) {
-    if (type === 1) {
-      router.push("/orders/admin");
-    } else {
+  function navigate() {
+    
       router.push("/orders");
-    }
+    
   }
 
   return (
@@ -42,20 +40,6 @@ export default function AppHeader() {
         <TooltipContent>Toggle theme</TooltipContent>
       </Tooltip>
 
-      <Tooltip>
-        <TooltipTrigger >
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full"
-            onClick={() => navigate(1)}
-          >
-            <ShieldCheck className="h-4 w-4" />
-            <span className="sr-only">View Admin Orders</span>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>View Admin Orders</TooltipContent>
-      </Tooltip>
 
       <Tooltip>
         <TooltipTrigger >
@@ -63,7 +47,7 @@ export default function AppHeader() {
             variant="outline"
             size="icon"
             className="rounded-full"
-            onClick={() => navigate(2)}
+            onClick={navigate}
           >
             <Package className="h-4 w-4" />
             <span className="sr-only">View Orders</span>

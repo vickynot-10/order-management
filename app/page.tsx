@@ -1,9 +1,5 @@
-import ProductsList from "./(client)/products/ProductsList";
+import { redirect } from "next/navigation";
+
 export default function HomePage() {
-  return (
-    <div className=" flex flex-col p-3">
-     
-      <ProductsList />
-    </div>
-  );
+  redirect("/products");
 }
