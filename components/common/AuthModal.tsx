@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useSignUp } from "@/hooks/queries/useClientAuth";
+import { useSignUp , useLogin} from "@/hooks/queries/useClientAuth";
 
 const signInSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -49,7 +49,7 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
   } = useForm<SignInValues>({ resolver: zodResolver(signInSchema) });
 
   
-  const { mutate , isPending :isSubmitting } = useSignUp()
+  const { mutate , isPending :isSubmitting } = useLogin()
 
 
   async function onSubmit(values: SignInValues) {
