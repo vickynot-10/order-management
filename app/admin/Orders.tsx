@@ -63,7 +63,7 @@ export default function ViewOrders() {
     <>
     <AdminHeader />
     <div className="p-6 flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">Your Orders</h2>
+      <h2 className="text-lg font-semibold"> Orders</h2>
 
       {isLoading && (
         <div className="flex flex-col gap-4">
@@ -83,7 +83,7 @@ export default function ViewOrders() {
           <div className="text-center">
             <h3 className="text-lg font-semibold">No orders yet</h3>
             <p className="text-sm text-muted-foreground">
-              Orders you place will show up here.
+              No Orders 
             </p>
           </div>
         </div>

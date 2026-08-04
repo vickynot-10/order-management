@@ -4,7 +4,27 @@ export async function GET(req: NextRequest) {
   try {
     const orders = await db
       .collection("orders")
-      .find()
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "fk_user_id",
+            foreignField: "_id",
+            as: "ordered_by",
+          },
+        },
+        {
+          $unwind: {
+            path: "$ordered_by",
+            preserveNullAndEmptyArrays: false,
+          },
+        },
+        {
+          $addFields: {
+            ordered_by: "$ordered_by.name",
+          },
+        },
+      ])
       .sort({ ordered_on: -1 })
       .toArray();
 

@@ -38,7 +38,7 @@ export function useGetAdminOrders() {
   return useQuery({
     queryKey: ["admin-orders"],
     queryFn: async () => {
-      const res = await api.get("/admin-orders" ) ;
+      const res = await api.get("/admin/orders" ) ;
       return res.data?.orders ?? [];
     },
   });
