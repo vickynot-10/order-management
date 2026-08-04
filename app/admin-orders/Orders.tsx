@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getDeviceId } from "../checkout/Checkout";
 import {
   useGetAdminOrders,
   useUpdateOrderStatus,

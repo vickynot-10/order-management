@@ -213,8 +213,8 @@ export default function AuthModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <DialogTrigger asChild>
+        <TooltipTrigger >
+          <DialogTrigger>
             <Button variant="outline" size="icon" className="rounded-full">
               <UserIcon className="h-4 w-4" />
               <span className="sr-only">Sign In / Sign Up</span>

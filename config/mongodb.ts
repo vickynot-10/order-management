@@ -5,10 +5,10 @@ declare global {
   var _mongoDb: Db | undefined;
 }
 
-const dbName = process.env.MONGODB_NAME;
+const dbName = process.env.MONGO_DB;
 if (!dbName) throw new Error("Missing MONGODB_NAME");
 
-const uri: string | undefined = process.env.MONGODB_URI;
+const uri: string | undefined = process.env.MONGO_URI;
 if (!uri) throw new Error("MONGO URI IS UNDEFINED");
 
 let client: MongoClient;

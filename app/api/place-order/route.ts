@@ -5,30 +5,30 @@ import { z } from "zod";
 
 const ProductSchema = z.object({
   id: z.number({
-    error: "Product ID is required",
+    required_error: "Product ID is required",
   }),
 
   product_name: z
     .string({
-      error: "Product name is required",
+      required_error: "Product name is required",
     })
     .min(1, "Product name is required"),
 
   image: z
     .string({
-      error: "Product image is required",
+      required_error: "Product image is required",
     })
     .url("Invalid product image URL"),
 
   price: z
     .number({
-      error: "Product price is required",
+      required_error: "Product price is required",
     })
     .positive("Product price must be greater than 0"),
 
   quantity: z
     .number({
-      error: "Product quantity is required",
+      required_error: "Product quantity is required",
     })
     .int("Product quantity must be an integer")
     .positive("Product quantity must be greater than 0"),
@@ -37,29 +37,30 @@ const ProductSchema = z.object({
 const PlaceOrderSchema = z.object({
   full_name: z
     .string({
-      error: "Full name is required",
+      required_error: "Full name is required",
     })
     .min(1, "Full name is required"),
 
   address: z
     .string({
-      error: "Address is required",
+      required_error: "Address is required",
     })
     .min(1, "Address is required"),
 
   phone: z
     .string({
-      error: "Phone number is required",
+      required_error: "Phone number is required",
     })
     .min(10, "Phone number must be at least 10 digits"),
+
   device_id: z.string().optional(),
+
   products: z
     .array(ProductSchema, {
-      error: "Products are required",
+      required_error: "Products are required",
     })
     .min(1, "At least one product is required"),
 });
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
