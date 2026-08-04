@@ -194,7 +194,6 @@ export default function ViewOrders() {
                   {STATUS_OPTIONS.map((status) => (
                     <DropdownMenuItem
                       key={status}
-                      disabled={status === order.status}
                       onClick={() => handleStatusChange(order._id, status)}
                     >
                       {status}

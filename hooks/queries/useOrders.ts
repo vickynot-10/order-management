@@ -49,7 +49,7 @@ export function useUpdateOrderStatus() {
 
   return useMutation({
     mutationFn: async (data: { order_id: string; status: string }) => {
-      const res = await api.patch("/orders", data);
+      const res = await api.patch("/admin/orders", data);
       return res.data;
     },
     onSuccess: (data) => {
