@@ -13,7 +13,7 @@ import {
 
 import { ShoppingCart, PackageSearch } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -24,12 +24,27 @@ const DrawerWithSides = () => {
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
 
-  useEffect(() => {
-    const products = localStorage.getItem("cart")
-      ? JSON.parse(localStorage.getItem("cart") || "[]")
-      : [];
-    setProducts(products);
+  const syncCart = useCallback(() => {
+    const stored = localStorage.getItem("cart");
+    setProducts(stored ? JSON.parse(stored) : []);
   }, []);
+
+  useEffect(() => {
+    syncCart();
+
+    window.addEventListener("cart-updated", syncCart);
+    window.addEventListener("storage", syncCart);
+
+    return () => {
+      window.removeEventListener("cart-updated", syncCart);
+      window.removeEventListener("storage", syncCart);
+    };
+  }, [syncCart]);
+
+  const handleOpenChange = (next: boolean) => {
+    if (next) syncCart();
+    setOpen(next);
+  };
 
   const total = useMemo(() => {
     return products.reduce(
@@ -50,7 +65,7 @@ const DrawerWithSides = () => {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Drawer swipeDirection="right" open={open} onOpenChange={setOpen}>
+      <Drawer swipeDirection="right" open={open} onOpenChange={handleOpenChange}>
         <DrawerTrigger>
           <Button size="lg">View Cart</Button>
         </DrawerTrigger>
