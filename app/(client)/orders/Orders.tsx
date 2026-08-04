@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getDeviceId } from "../checkout/Checkout";
 import { useGetOrders } from "@/hooks/queries/useOrders";
 import { ORDER_CONSTANTS } from "@/constants";
 import { OrderStatus } from "@/types/order.types";
@@ -34,15 +33,10 @@ function OrderSkeleton() {
 }
 
 export default function ViewOrders() {
-  const [deviceId, setDeviceId] = useState("");
-
-  useEffect(() => {
-    setDeviceId(getDeviceId());
-  }, []);
-
-  const { data: orders, isLoading, isError } = useGetOrders(deviceId);
-
  
+
+  const { data: orders, isLoading, isError } = useGetOrders();
+
   return (
     <div className="p-6 flex flex-col gap-4">
       <h2 className="text-lg font-semibold">Your Orders</h2>

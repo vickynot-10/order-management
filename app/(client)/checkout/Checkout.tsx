@@ -15,14 +15,7 @@ type DeliveryDetails = {
   phone: string;
 };
 
-export function getDeviceId(): string {
-  let deviceId = localStorage.getItem("device_id");
-  if (!deviceId) {
-    deviceId = crypto.randomUUID();
-    localStorage.setItem("device_id", deviceId);
-  }
-  return deviceId;
-}
+
 
 export default function Checkout() {
   const [products, setProducts] = useState<CartItem[]>([]);
@@ -30,6 +23,7 @@ export default function Checkout() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<DeliveryDetails>();
 
@@ -45,12 +39,13 @@ export default function Checkout() {
     return products.reduce((sum, item) => sum + item.price * item.quantity, 0);
   }, [products]);
 
+  
+
   const onSubmit = (data: DeliveryDetails) => {
     if (products.length === 0) {
       return toast.error("Your cart is empty");
     }
     (data as any).products = products;
-    (data as any).device_id = getDeviceId();
     mutate(data);
   };
 

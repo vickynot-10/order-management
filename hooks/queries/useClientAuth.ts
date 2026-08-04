@@ -15,13 +15,28 @@ export function useLogin() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.msg ?? "Logged in successfully");
-        router.push("/admin");
+        router.push("/products");
       }
     },
   });
 }
 
+export function useLogout() {
+  const router = useRouter();
 
+  return useMutation({
+    mutationFn: async () => {
+      const res = await api.post("/sign-out");
+      return res.data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.msg ?? "Logged in successfully");
+        router.push("/products");
+      }
+    },
+  });
+}
 
 export function useSignUp() {
   const router = useRouter();
@@ -34,10 +49,8 @@ export function useSignUp() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.msg ?? "Signup successfully");
-        router.push("/admin");
+        router.push("/products");
       }
     },
   });
 }
-
-

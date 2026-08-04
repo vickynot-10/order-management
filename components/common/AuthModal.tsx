@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { LogIn, Mail, Lock, User as UserIcon, Loader2 } from "lucide-react";
+import { LogIn, LogOut, Mail, Lock, User as UserIcon, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,8 +18,13 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useSignUp , useLogin} from "@/hooks/queries/useClientAuth";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useSignUp, useLogin, useLogout } from "@/hooks/queries/useClientAuth";
+import { useMe } from "@/hooks/queries/useMe";
 
 const signInSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -45,15 +50,13 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
   const {
     register,
     handleSubmit,
-    formState: { errors},
+    formState: { errors },
   } = useForm<SignInValues>({ resolver: zodResolver(signInSchema) });
 
-  
-  const { mutate , isPending :isSubmitting } = useLogin()
-
+  const { mutate, isPending: isSubmitting } = useLogin();
 
   async function onSubmit(values: SignInValues) {
-    mutate(values)
+    mutate(values);
   }
 
   return (
@@ -108,13 +111,13 @@ function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
   const {
     register,
     handleSubmit,
-    formState: { errors},
+    formState: { errors },
   } = useForm<SignUpValues>({ resolver: zodResolver(signUpSchema) });
 
-  const { mutate , isPending :isSubmitting } = useSignUp()
+  const { mutate, isPending: isSubmitting } = useSignUp();
 
-   function onSubmit(values: SignUpValues) {
-    mutate(values)
+  function onSubmit(values: SignUpValues) {
+    mutate(values);
   }
 
   return (
@@ -202,11 +205,35 @@ function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
 
 export default function AuthModal() {
   const [open, setOpen] = useState(false);
+  const { data: me } = useMe();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+  if (me) {
+    return (
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-medium">{me.name}</span>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full text-red-600 hover:text-red-700"
+          onClick={() => logout()}
+          disabled={isLoggingOut}
+        >
+          {isLoggingOut ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <LogOut className="h-4 w-4" />
+          )}
+          <span className="sr-only">Logout</span>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Tooltip>
-        <TooltipTrigger >
+        <TooltipTrigger>
           <DialogTrigger>
             <Button variant="outline" size="icon" className="rounded-full">
               <UserIcon className="h-4 w-4" />
@@ -225,7 +252,10 @@ export default function AuthModal() {
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="signin" className="w-full flex flex-col items-center">
+        <Tabs
+          defaultValue="signin"
+          className="w-full flex flex-col items-center"
+        >
           <TabsList className="grid grid-cols-2 w-full max-w-[220px]">
             <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>

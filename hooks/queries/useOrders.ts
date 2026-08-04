@@ -21,14 +21,13 @@ export function usePlaceOrder() {
   });
 }
 
-export function useGetOrders(deviceId: string) {
+export function useGetOrders() {
   return useQuery({
-    queryKey: ["orders", deviceId],
+    queryKey: ["orders"],
     queryFn: async () => {
-      const res = await api.get("/orders", { params: { device_id: deviceId } });
+      const res = await api.get("/orders");
       return res.data?.orders ?? [];
     },
-    enabled: !!deviceId,
     //  refetchInterval: 8000,
     // refetchIntervalInBackground: false,
   });

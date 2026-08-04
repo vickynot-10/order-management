@@ -1,4 +1,6 @@
 import db from "@/config/mongodb";
+import { GetUserDetails } from "@/service/getUserID";
+import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 import { z } from "zod";
@@ -63,6 +65,15 @@ const PlaceOrderSchema = z.object({
 });
 export async function POST(req: NextRequest) {
   try {
+    const token = req.cookies.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { message: "Login Required to Place order !" },
+        { status: 401 },
+      );
+    }
+
     const body = await req.json();
     if (!body) {
       return NextResponse.json(
@@ -85,6 +96,15 @@ export async function POST(req: NextRequest) {
 
     const { full_name, address, phone, products, device_id } = validate.data;
 
+    const user: any = GetUserDetails(token);
+
+    if (!user || !user.user_id) {
+      return NextResponse.json(
+        { message: "Login Required to Place order !" },
+        { status: 401 },
+      );
+    }
+
     const payload = {
       full_name,
       address,
@@ -92,7 +112,7 @@ export async function POST(req: NextRequest) {
       products,
       ordered_on: new Date(),
       status: "placed",
-      device_id,
+      fk_user_id: new ObjectId(user.user_id),
     };
 
     const insert = await db.collection("orders").insertOne(payload);

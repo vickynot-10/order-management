@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { LogOut } from "lucide-react";
-// import { signOut } from "next-auth/react"; // swap for your auth lib's signOut
+import { useMe } from "@/hooks/queries/useMe";
 
 export default function AdminHeader() {
   const dialogRef = useRef<HTMLDialogElement>(null);
