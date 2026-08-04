@@ -5,7 +5,9 @@ import { ORDER_CONSTANTS } from "@/constants";
 import { OrderStatus } from "@/types/order.types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { PackageSearch } from "lucide-react";
+import { ChevronLeft, PackageSearch } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   [ORDER_CONSTANTS.PLACED]: "bg-blue-100 text-blue-700",
@@ -37,9 +39,19 @@ export default function ViewOrders() {
 
   const { data: orders, isLoading, isError } = useGetOrders();
 
+  const { push }=useRouter()
+  function Goback(){
+push("/products")
+  }
+
   return (
     <div className="p-6 flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">Your Orders</h2>
+     <div className=" flex flex-row items-center gap-3" >
+      <Button onClick={Goback} >
+<ChevronLeft />
+      </Button>
+       <h2 className="text-lg font-semibold">Your Orders</h2>
+     </div>
 
       {isLoading && (
         <div className="flex flex-col gap-4">

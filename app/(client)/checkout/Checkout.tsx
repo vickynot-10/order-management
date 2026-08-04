@@ -6,16 +6,15 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { CartItem } from "@/types/product.types";
 import CartActionButtons from "../products/components/CartActionButtons";
-import { PackageSearch } from "lucide-react";
+import { ChevronLeft, PackageSearch } from "lucide-react";
 import { usePlaceOrder } from "@/hooks/queries/useOrders";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 type DeliveryDetails = {
   full_name: string;
   address: string;
   phone: string;
 };
-
-
 
 export default function Checkout() {
   const [products, setProducts] = useState<CartItem[]>([]);
@@ -23,7 +22,7 @@ export default function Checkout() {
   const {
     register,
     handleSubmit,
-    setValue,
+
     formState: { errors },
   } = useForm<DeliveryDetails>();
 
@@ -39,8 +38,6 @@ export default function Checkout() {
     return products.reduce((sum, item) => sum + item.price * item.quantity, 0);
   }, [products]);
 
-  
-
   const onSubmit = (data: DeliveryDetails) => {
     if (products.length === 0) {
       return toast.error("Your cart is empty");
@@ -49,10 +46,20 @@ export default function Checkout() {
     mutate(data);
   };
 
+  const { push } = useRouter();
+  function Goback() {
+    push("/products");
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
       <div className="rounded-lg border p-4">
-        <h2 className="text-lg font-semibold">Shopping Cart</h2>
+        <div className=" flex flex-row items-center gap-3">
+          <Button onClick={Goback}>
+            <ChevronLeft />
+          </Button>
+          <h2 className="text-lg font-semibold">Shopping Cart</h2>
+        </div>
         <p className="text-sm text-muted-foreground mb-4">
           You have {products.length} items in your cart
         </p>
