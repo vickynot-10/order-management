@@ -4,6 +4,7 @@ import { api } from "@/utils/axios";
 interface User {
   user_id: string;
   email: string;
+  name: string;
 }
 
 export const useMe = () => {

@@ -1,4 +1,3 @@
-
 import db from "@/config/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
@@ -84,8 +83,7 @@ export async function POST(req: NextRequest) {
     const token = GenerateToken({
       email,
       user_id: find_user._id,
-      full_name: find_user.full_name,
-      user_type: 2,
+      name: find_user.name,
     });
 
     const response = NextResponse.json(

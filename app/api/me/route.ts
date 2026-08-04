@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
 
     if (!token) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false }, { status: 200 });
     }
 
     const data = DecryptJWT(token);

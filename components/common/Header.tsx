@@ -3,10 +3,14 @@
 import DrawerWithSides from "@/app/(client)/products/components/CartDrawer";
 import AuthModal from "@/components/common/AuthModal";
 import { useTheme } from "next-themes";
-import { Moon, Sun, ShieldCheck, Package } from "lucide-react";
+import { Moon, Sun, Package } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function AppHeader() {
   const { setTheme, resolvedTheme } = useTheme();
@@ -17,15 +21,13 @@ export default function AppHeader() {
   }
 
   function navigate() {
-    
-      router.push("/orders");
-    
+    router.push("/orders");
   }
 
   return (
     <header className="flex flex-row items-center justify-end gap-2">
       <Tooltip>
-        <TooltipTrigger >
+        <TooltipTrigger>
           <Button
             variant="outline"
             size="icon"
@@ -40,9 +42,8 @@ export default function AppHeader() {
         <TooltipContent>Toggle theme</TooltipContent>
       </Tooltip>
 
-
       <Tooltip>
-        <TooltipTrigger >
+        <TooltipTrigger>
           <Button
             variant="outline"
             size="icon"

@@ -28,9 +28,21 @@ export function useGetAdminOrders() {
       const res = await api.get("/admin/orders");
       return res.data?.orders ?? [];
     },
-  
   });
-
 }
 
-
+export function useAdminLogout() {
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async () => {
+      const res = await api.post("/admin/logout");
+      return res.data;
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.msg ?? "Logged out successfully");
+        router.push("/admin");
+      }
+    },
+  });
+}

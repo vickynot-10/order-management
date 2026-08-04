@@ -101,7 +101,6 @@ export async function POST(req: NextRequest) {
       email,
       user_id: insert_doc.insertedId,
       name,
-      user_type: 2,
     });
 
     const response = NextResponse.json(

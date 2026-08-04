@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 export function useLogin() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: any) => {
@@ -15,6 +16,7 @@ export function useLogin() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.msg ?? "Logged in successfully");
+        queryClient.invalidateQueries({ queryKey: ["me"] });
         router.push("/products");
       }
     },
@@ -23,6 +25,7 @@ export function useLogin() {
 
 export function useLogout() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
@@ -31,7 +34,8 @@ export function useLogout() {
     },
     onSuccess: (data) => {
       if (data.success) {
-        toast.success(data.msg ?? "Logged in successfully");
+        toast.success(data.msg ?? "Logged out successfully");
+        queryClient.invalidateQueries({ queryKey: ["me"] });
         router.push("/products");
       }
     },
@@ -40,6 +44,7 @@ export function useLogout() {
 
 export function useSignUp() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: any) => {
@@ -49,6 +54,7 @@ export function useSignUp() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.msg ?? "Signup successfully");
+        queryClient.invalidateQueries({ queryKey: ["me"] });
         router.push("/products");
       }
     },
