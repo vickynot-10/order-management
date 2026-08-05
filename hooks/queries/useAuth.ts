@@ -12,6 +12,7 @@ export function useAdminLogin() {
       const res = await api.post("/admin/login", data);
       return res.data;
     },
+    
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.msg ?? "Logged in successfully");
@@ -21,15 +22,7 @@ export function useAdminLogin() {
   });
 }
 
-export function useGetAdminOrders() {
-  return useQuery({
-    queryKey: ["admin-orders"],
-    queryFn: async () => {
-      const res = await api.get("/admin/orders");
-      return res.data?.orders ?? [];
-    },
-  });
-}
+
 
 export function useAdminLogout() {
   const router = useRouter();

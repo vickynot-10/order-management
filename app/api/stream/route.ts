@@ -3,25 +3,57 @@ import { orderEvents } from "@/lib/order_events";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  let keepAlive: ReturnType<typeof setInterval>;
+  let onStatusUpdate: (payload: any) => void;
+  let closed = false;
+
   const stream = new ReadableStream({
     start(controller) {
       const encoder = new TextEncoder();
 
       const send = (data: any) => {
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+        } catch (err) {
+          console.log("[stream] enqueue failed on send, closing", err);
+          closed = true;
+          cleanup();
+        }
       };
 
-      const onStatusUpdate = (payload: any) => send(payload);
+      onStatusUpdate = (payload: any) => send(payload);
       orderEvents.on("status-update", onStatusUpdate);
 
-      const keepAlive = setInterval(() => {
-        controller.enqueue(encoder.encode(": ping\n\n"));
+      keepAlive = setInterval(() => {
+        if (closed) return;
+        try {
+          controller.enqueue(encoder.encode(": ping\n\n"));
+        } catch (err) {
+          console.log("[stream] enqueue failed on ping, closing", err);
+          closed = true;
+          cleanup();
+        }
       }, 15000);
 
-      return () => {
+      function cleanup() {
         clearInterval(keepAlive);
+        try {
+          orderEvents.off("status-update", onStatusUpdate);
+        } catch (err) {
+          console.log("[stream] error removing listener", err);
+        }
+      }
+    },
+    cancel(reason) {
+      console.log("[stream] cancel() called", reason);
+      closed = true;
+      clearInterval(keepAlive);
+      try {
         orderEvents.off("status-update", onStatusUpdate);
-      };
+      } catch (err) {
+        console.log("[stream] error removing listener in cancel", err);
+      }
     },
   });
 

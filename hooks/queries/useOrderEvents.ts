@@ -9,7 +9,6 @@ export function useOrderStatusStream() {
 
     source.onmessage = (event) => {
       const { order_id, status } = JSON.parse(event.data);
-
       queryClient.setQueriesData({ queryKey: ["orders"] }, (old: any) => {
         if (!old) return old;
         return old.map((order: any) =>

@@ -1,9 +1,5 @@
 "use client";
 import AdminHeader from "./components/AdminHeader";
-import {
-  useGetAdminOrders,
-  useUpdateOrderStatus,
-} from "@/hooks/queries/useOrders";
 import { ORDER_CONSTANTS } from "@/constants";
 import { OrderStatus } from "@/types/order.types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,6 +13,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDown, PackageSearch, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
+import {
+  useGetAdminOrders,
+  useUpdateOrderStatus,
+} from "@/hooks/queries/useAdminOrders";
 
 const STATUS_OPTIONS = Object.values(ORDER_CONSTANTS) as OrderStatus[];
 
