@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Order Management — Food Delivery App
 
-## Getting Started
+Live demo: https://order-management-gamma-black.vercel.app/admin  
+Repo: https://github.com/vickynot-10/order-management  
+Video walkthrough: [Loom link]
 
-First, run the development server:
+## Tech Stack
+- Next.js (App Router)
+- MongoDB
+- Zod (validation)
+- Jest + React Testing Library
+- Server-Sent Events (real-time order status)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+- Menu display with add-to-cart
+- Cart with quantity controls, persisted to localStorage
+- Checkout with delivery details + validation
+- Order placement via REST API
+- Real-time order status updates (SSE)
+- Auth (sign up / sign in / admin login)
+- Admin: view + update order status
+
+## Environment Variables
+
+Create a `.env.local` file in the project root with the following:
+
+```dotenv
+MONGO_URI=mongodb://127.0.0.1:27017
+MONGO_DB=ordermanagement
+JWT_SECRET_KEY=your_jwt_secret_key_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A reference copy is included as `.env.example` in the repo root — copy it to `.env.local` and fill in your own values.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running Locally
+```bash
+npm install
+cp .env.example .env.local   # then fill in your own MongoDB URI and JWT secret
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Running Tests
+```bash
+npm run test
+```
+77 tests covering API routes (CRUD, validation, auth, error handling) and key UI components (cart, checkout, order status, real-time stream).
 
-## Learn More
+## API Endpoints
+| Method | Route | Description |
+|---|---|---|
+| POST | /api/sign-up | Register user |
+| POST | /api/sign-in | Login |
+| POST | /api/sign-out | Logout |
+| GET | /api/me | Current user |
+| GET | /api/orders | List user's orders |
+| POST | /api/place-order | Place an order |
+| GET | /api/stream | SSE order status stream |
+| POST | /api/admin/login | Admin login |
+| POST | /api/admin/logout | Admin logout |
+| GET / PATCH | /api/admin/orders | List / update orders (admin) |
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture Notes
+- Cart state lives in localStorage, synced across components via a custom `cart-updated` window event
+- Order status updates pushed via SSE rather than polling
+- Input validation with Zod schemas on every mutating endpoint
