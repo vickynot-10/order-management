@@ -1,8 +1,28 @@
 import { orderEvents } from "@/lib/order_events";
+import { GetUserDetails } from "@/service/getUserID";
+import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+
+  if (!token) {
+    return NextResponse.json(
+      { message: "Login Required to Place order !" },
+      { status: 401 },
+    );
+  }
+  const user: any = GetUserDetails(token);
+
+  if (!user || !user.user_id) {
+    return NextResponse.json(
+      { message: "Login Required to Place order !" },
+      { status: 401 },
+    );
+  }
+  const userId = user.user_id;
+
   let keepAlive: ReturnType<typeof setInterval>;
   let onStatusUpdate: (payload: any) => void;
   let closed = false;
@@ -14,7 +34,9 @@ export async function GET() {
       const send = (data: any) => {
         if (closed) return;
         try {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify(data)}\n\n`),
+          );
         } catch (err) {
           console.log("[stream] enqueue failed on send, closing", err);
           closed = true;
@@ -22,7 +44,10 @@ export async function GET() {
         }
       };
 
-      onStatusUpdate = (payload: any) => send(payload);
+      onStatusUpdate = (payload: any) => {
+        if (payload.user_id !== userId) return;
+        send(payload);
+      };
       orderEvents.on("status-update", onStatusUpdate);
 
       keepAlive = setInterval(() => {

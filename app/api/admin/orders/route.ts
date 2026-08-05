@@ -39,18 +39,18 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const { order_id, status } = await req.json();
+    const { order_id, status, fk_user_id } = await req.json();
 
-    if (!order_id || !status) {
+    if (!order_id || !status || !fk_user_id) {
       return NextResponse.json(
-        { msg: "order_id and status are required", success: false },
+        { msg: "order_id, status and fk_user_id are required", success: false },
         { status: 400 },
       );
     }
 
     const result = await db
       .collection("orders")
-      .updateOne({ _id: new ObjectId(order_id) }, { $set: { status } });
+      .updateOne({ _id: new ObjectId(order_id) , fk_user_id : new ObjectId(fk_user_id) }, { $set: { status } });
 
     if (result.matchedCount === 0) {
       return NextResponse.json(
@@ -59,7 +59,7 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    orderEvents.emit("status-update", { order_id, status });
+    orderEvents.emit("status-update", { order_id, status, user_id: fk_user_id });
 
     return NextResponse.json(
       { msg: "Order updated successfully", success: true },

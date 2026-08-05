@@ -74,9 +74,9 @@ export default function ViewOrders() {
   const { data: orders, isLoading, isError } = useGetAdminOrders();
   const { mutate: updateStatus, isPending } = useUpdateOrderStatus();
 
-  const handleStatusChange = (orderId: string, status: OrderStatus) => {
+  const handleStatusChange = (orderId: string, status: OrderStatus , fk_user_id :string) => {
     updateStatus(
-      { order_id: orderId, status },
+      { order_id: orderId, status , fk_user_id },
       {
         onSuccess: () => toast.success(`Order marked as ${status}`),
         onError: () => toast.error("Failed to update order status"),
@@ -194,7 +194,7 @@ export default function ViewOrders() {
                   {STATUS_OPTIONS.map((status) => (
                     <DropdownMenuItem
                       key={status}
-                      onClick={() => handleStatusChange(order._id, status)}
+                      onClick={() => handleStatusChange(order._id, status , order.fk_user_id)}
                     >
                       {status}
                     </DropdownMenuItem>

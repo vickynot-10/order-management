@@ -20,7 +20,7 @@ export function useUpdateOrderStatus() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: { order_id: string; status: string }) => {
+    mutationFn: async (data: { order_id: string; status: string , fk_user_id : string}) => {
       const res = await api.patch("/admin/orders", data);
       return res.data;
     },
