@@ -3,7 +3,7 @@
 import DrawerWithSides from "@/app/(client)/products/components/CartDrawer";
 import AuthModal from "@/components/common/AuthModal";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Package } from "lucide-react";
+import { Moon, Sun, Package, CreditCard } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import {
@@ -20,8 +20,8 @@ export default function AppHeader() {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }
 
-  function navigate() {
-    router.push("/orders");
+  function navigate(str: string) {
+    router.push(`/${str}`);
   }
 
   return (
@@ -48,7 +48,7 @@ export default function AppHeader() {
             variant="outline"
             size="icon"
             className="rounded-full"
-            onClick={navigate}
+            onClick={() => navigate("orders")}
           >
             <Package className="h-4 w-4" />
             <span className="sr-only">View Orders</span>
@@ -56,7 +56,20 @@ export default function AppHeader() {
         </TooltipTrigger>
         <TooltipContent>View Orders</TooltipContent>
       </Tooltip>
-
+      <Tooltip>
+        <TooltipTrigger>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            onClick={() => navigate("checkout")}
+          >
+            <CreditCard className="h-4 w-4" />
+            <span className="sr-only">Checkout</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Checkout</TooltipContent>
+      </Tooltip>
       <AuthModal />
 
       <DrawerWithSides />

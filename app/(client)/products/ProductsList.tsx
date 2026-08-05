@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-
+import { ShoppingBag } from "lucide-react";
 const products = [
   {
     id: 1,
@@ -63,7 +63,15 @@ export default function ProductsList() {
   }
   return (
     <>
-      <h4>Products</h4>
+    <div className="mb-8 flex items-center gap-3 border-b pb-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-600">
+          <ShoppingBag className="h-5 w-5 text-white" />
+        </div>
+        <div>
+          <h4 className="text-2xl font-semibold">Products</h4>
+          <p className="text-sm text-muted-foreground">{products.length} items available</p>
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
           <div
