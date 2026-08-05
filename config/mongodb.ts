@@ -18,11 +18,10 @@ try {
   if (!global._mongoClient || !global._mongoDb) {
     client = new MongoClient(uri);
     await client.connect();
-   
     db = client.db(dbName);
     global._mongoClient = client;
     global._mongoDb = db;
-    await EnsureIndexes(db)
+    await EnsureIndexes(db);
     console.log("Connected to MongoDB (new connection)");
   } else {
     client = global._mongoClient;
@@ -30,14 +29,14 @@ try {
     console.log("Reusing existing MongoDB connection");
   }
 } catch (error) {
-  throw new Error(`Failed to connect to MongoDB: ${error instanceof Error ? error.message : String(error)}`);
+  throw new Error(
+    `Failed to connect to MongoDB: ${error instanceof Error ? error.message : String(error)}`,
+  );
 }
 
 async function EnsureIndexes(db: Db) {
-  // const usersCollection = db.collection("users");
-  // usersCollection.createIndex({ email: 1 }, { unique: true });
-  // usersCollection.createIndex({ user_type: 1 });
-  // usersCollection.createIndex({ status: 1 });
+  db.collection("users").createIndex({ email: 1 }, { unique: true });
+  db.collection("orderes").createIndex({ ordered_on: 1 });
 }
 
 export default db;
