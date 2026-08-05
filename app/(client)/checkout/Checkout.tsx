@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { CartItem } from "@/types/product.types";
@@ -34,10 +34,10 @@ export default function Checkout() {
   }, []);
   const { mutate, isPending } = usePlaceOrder();
 
-  const subtotal = useMemo(() => {
-    return products.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  }, [products]);
-
+  const subtotal = products.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
   const onSubmit = (data: DeliveryDetails) => {
     if (products.length === 0) {
       return toast.error("Your cart is empty");

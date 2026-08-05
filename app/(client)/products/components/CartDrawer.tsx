@@ -13,7 +13,7 @@ import {
 
 import { ShoppingCart, PackageSearch } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect,  useState, useCallback } from "react";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -46,12 +46,10 @@ const DrawerWithSides = () => {
     setOpen(next);
   };
 
-  const total = useMemo(() => {
-    return products.reduce(
-      (sum: number, item: any) => sum + item.price * item.quantity,
-      0,
-    );
-  }, [products]);
+ const total = products.reduce(
+  (sum: number, item: any) => sum + item.price * item.quantity,
+  0,
+);
 
   const isCartEmpty = products.length <= 0;
 
