@@ -2,7 +2,7 @@
 
 Live demo: https://order-management-gamma-black.vercel.app/admin  
 Repo: https://github.com/vickynot-10/order-management  
-Video walkthrough: [Loom link]
+Video walkthrough: https://drive.google.com/file/d/1eB7MnPyr5d0e2AEvatoBwsjNatN-xb-a/view?usp=drivesdk
 
 ## Tech Stack
 - Next.js (App Router)
