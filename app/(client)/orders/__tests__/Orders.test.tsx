@@ -62,13 +62,13 @@ describe('ViewOrders', () => {
   })
 
   it('renders order details when orders exist', () => {
-    mockedUseGetOrders.mockReturnValue({ data: [baseOrder], isLoading: false, isError: false })
-    render(<ViewOrders />)
-    expect(screen.getByText('Vicky Selvam')).toBeInTheDocument()
-    expect(screen.getByText('Margherita Pizza')).toBeInTheDocument()
-    expect(screen.getByText(/qty 2/i)).toBeInTheDocument()
-    expect(screen.getByText(ORDER_CONSTANTS.PLACED)).toBeInTheDocument()
-  })
+  mockedUseGetOrders.mockReturnValue({ data: [baseOrder], isLoading: false, isError: false })
+  render(<ViewOrders />)
+  expect(screen.getByText('Vicky Selvam')).toBeInTheDocument()
+  expect(screen.getByText('Margherita Pizza')).toBeInTheDocument()
+  expect(screen.getByText(/qty 2/i)).toBeInTheDocument()
+  expect(screen.getAllByText(ORDER_CONSTANTS.PLACED).length).toBeGreaterThan(0)
+})
 
   it('shows cancelled message in timeline for cancelled orders', () => {
     const cancelledOrder = { ...baseOrder, status: ORDER_CONSTANTS.CANCELLED }

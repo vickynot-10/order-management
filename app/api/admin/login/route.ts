@@ -33,20 +33,7 @@ export async function POST(request: NextRequest) {
 
     const { email, password } = validation.data;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { msg: "Invalid email format" },
-        { status: 400 },
-      );
-    }
-
-    if (password.length < 6) {
-      return NextResponse.json(
-        { msg: "Password must be at least 6 characters" },
-        { status: 400 },
-      );
-    }
+    
     const user = await db.collection("users").findOne(
       {
         email: email,
