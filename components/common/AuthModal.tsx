@@ -4,7 +4,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { LogIn, LogOut, Mail, Lock, User as UserIcon, Loader2 } from "lucide-react";
+import {
+  LogIn,
+  LogOut,
+  Mail,
+  Lock,
+  User as UserIcon,
+  Loader2,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,8 +62,12 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
 
   const { mutate, isPending: isSubmitting } = useLogin();
 
-  async function onSubmit(values: SignInValues) {
-    mutate(values);
+  function onSubmit(values: SignInValues) {
+    mutate(values, {
+      onSuccess: (data) => {
+        if (data.success) onSuccess();
+      },
+    });
   }
 
   return (
@@ -117,7 +128,11 @@ function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
   const { mutate, isPending: isSubmitting } = useSignUp();
 
   function onSubmit(values: SignUpValues) {
-    mutate(values);
+    mutate(values, {
+      onSuccess: (data) => {
+        if (data.success) onSuccess();
+      },
+    });
   }
 
   return (

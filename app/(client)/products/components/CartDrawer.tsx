@@ -65,21 +65,25 @@ const DrawerWithSides = () => {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Drawer swipeDirection="right" open={open} onOpenChange={handleOpenChange}>
-        <DrawerTrigger>
-          <Button size="lg">View Cart</Button>
-        </DrawerTrigger>
+      <Drawer
+        swipeDirection="right"
+        open={open}
+        onOpenChange={handleOpenChange}
+      >
+        <DrawerTrigger render={<Button size="lg">View Cart</Button>} />
         <DrawerContent className="data-[vaul-drawer-direction=bottom]:max-h-[50vh] data-[vaul-drawer-direction=top]:max-h-[50vh]">
           <DrawerHeader className="relative">
-            <DrawerClose>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-4 right-4"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </DrawerClose>
+            <DrawerClose
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-4 right-4"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              }
+            />
 
             <DrawerTitle className="flex items-center gap-2">
               <ShoppingCart className="h-5 w-5" />
